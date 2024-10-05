@@ -589,7 +589,7 @@ def readCommand(argv):
 
     # Choose a ghost agent
     ghostType = loadAgent(options.ghost, noKeyboard)
-    args['ghosts'] = [ghostType(i+1) for i in range(options.numGhosts)]
+    args['ghosts'] = [ghostType(i + 1) for i in range(options.numGhosts)]
 
     # Choose a display format
     if options.quietGraphics:
@@ -656,7 +656,7 @@ def replayGame(layout, actions, display):
     import pacmanAgents
     import ghostAgents
     rules = ClassicGameRules()
-    agents = [pacmanAgents.GreedyAgent()] + [ghostAgents.RandomGhost(i+1)
+    agents = [pacmanAgents.GreedyAgent()] + [ghostAgents.RandomGhost(i + 1)
                                              for i in range(layout.getNumGhosts())]
     game = rules.newGame(layout, agents[0], agents[1:], display)
     state = game.state
@@ -704,7 +704,7 @@ def runGames(layout, pacman, ghosts, display, numGames, record, numTraining=0, c
             cPickle.dump(components, f)
             f.close()
 
-    if (numGames-numTraining) > 0:
+    if (numGames - numTraining) > 0:
         scores = [game.state.getScore() for game in games]
         wins = [game.state.isWin() for game in games]
         winRate = wins.count(True) / float(len(wins))

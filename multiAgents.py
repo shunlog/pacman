@@ -4,7 +4,7 @@
 # educational purposes provided that (1) you do not distribute or publish
 # solutions, (2) you retain this notice, and (3) you provide clear
 # attribution to UC Berkeley, including a link to http://ai.berkeley.edu.
-# 
+#
 # Attribution Information: The Pacman AI projects were developed at UC Berkeley.
 # The core projects and autograders were primarily created by John DeNero
 # (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
@@ -14,7 +14,9 @@
 
 from util import manhattanDistance
 from game import Directions
-import random, util, sys
+import random
+import util
+import sys
 
 from game import Agent
 
@@ -45,7 +47,7 @@ class ReflexAgent(Agent):
         scores = [self.evaluationFunction(gameState, action) for action in legalMoves]
         bestScore = max(scores)
         bestIndices = [index for index in range(len(scores)) if scores[index] == bestScore]
-        chosenIndex = random.choice(bestIndices) # Pick randomly among the best
+        chosenIndex = random.choice(bestIndices)  # Pick randomly among the best
 
         "Add more of your code here if you want to"
 
@@ -76,32 +78,32 @@ class ReflexAgent(Agent):
         "*** YOUR CODE HERE ***"
         listFood = newFood.asList()                        # All remaining food as list
         ghostPos = successorGameState.getGhostPositions()  # Get the ghost position
-        # Initialize with list 
+        # Initialize with list
         mFoodDist = []
         mGhostDist = []
 
-        # Find the distance of all the foods to the pacman 
+        # Find the distance of all the foods to the pacman
         for food in listFood:
-          mFoodDist.append(manhattanDistance(food, newPos))
+            mFoodDist.append(manhattanDistance(food, newPos))
 
         # Find the distance of all the ghost to the pacman
         for ghost in ghostPos:
-          mGhostDist.append(manhattanDistance(ghost, newPos))
+            mGhostDist.append(manhattanDistance(ghost, newPos))
 
         if currentGameState.getPacmanPosition() == newPos:
-          return (-(float("inf")))
-
-        for ghostDistance in mGhostDist:
-          if ghostDistance < 2:
             return (-(float("inf")))
 
-        if len(mFoodDist) == 0:
-          return float("inf")
-        else:
-          minFoodDist = min(mFoodDist)
-          maxFoodDist = max(mFoodDist)
+        for ghostDistance in mGhostDist:
+            if ghostDistance < 2:
+                return (-(float("inf")))
 
-        return 1000/sum(mFoodDist) + 10000/len(mFoodDist)
+        if len(mFoodDist) == 0:
+            return float("inf")
+        else:
+            minFoodDist = min(mFoodDist)
+            maxFoodDist = max(mFoodDist)
+
+        return 1000 / sum(mFoodDist) + 10000 / len(mFoodDist)
 
 
 def scoreEvaluationFunction(currentGameState):
@@ -136,7 +138,7 @@ class MultiAgentSearchAgent(Agent):
     """
 
     def __init__(self, evalFn='scoreEvaluationFunction', depth='2'):
-        self.index = 0 # Pacman is always agent index 0
+        self.index = 0  # Pacman is always agent index 0
         self.evaluationFunction = util.lookup(evalFn, globals())
         self.depth = int(depth)
 
@@ -214,7 +216,7 @@ def betterEvaluationFunction(currentGameState):
     """
     "*** YOUR CODE HERE ***"
     pacmanPos = currentGameState.getPacmanPosition()
-    ghostList = currentGameState.getGhostStates() 
+    ghostList = currentGameState.getGhostStates()
     foods = currentGameState.getFood()
     capsules = currentGameState.getCapsules()
     # Return based on game state
@@ -251,4 +253,3 @@ def betterEvaluationFunction(currentGameState):
 
 # Abbreviation
 better = betterEvaluationFunction
-

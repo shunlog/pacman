@@ -4,7 +4,7 @@
 # educational purposes provided that (1) you do not distribute or publish
 # solutions, (2) you retain this notice, and (3) you provide clear
 # attribution to UC Berkeley, including a link to http://ai.berkeley.edu.
-# 
+#
 # Attribution Information: The Pacman AI projects were developed at UC Berkeley.
 # The core projects and autograders were primarily created by John DeNero
 # (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
@@ -47,6 +47,8 @@ class Question(object):
         self.raiseNotDefined()
 
 # Question in which all test cases must be passed in order to receive credit
+
+
 class PassAllTestsQuestion(Question):
 
     def execute(self, grades):
@@ -79,7 +81,7 @@ class HackedPartialCreditQuestion(Question):
             else:
                 passed = passed and testResult
 
-        ## FIXME: Below terrible hack to match q3's logic
+        # FIXME: Below terrible hack to match q3's logic
         if int(points) == self.maxPoints and not passed:
             grades.assignZeroCredit()
         else:
@@ -99,6 +101,7 @@ class Q6PartialCreditQuestion(Question):
         if False in results:
             grades.assignZeroCredit()
 
+
 class PartialCreditQuestion(Question):
     """Fails any test which returns False, otherwise doesn't effect the grades object.
     Partial credit tests will add the required points."""
@@ -113,15 +116,11 @@ class PartialCreditQuestion(Question):
                 return False
 
 
-
 class NumberPassedQuestion(Question):
     """Grade is the number of test cases passed."""
 
     def execute(self, grades):
         grades.addPoints([f(grades) for _, f in self.testCases].count(True))
-
-
-
 
 
 # Template modeling a generic test case
@@ -186,4 +185,3 @@ class TestCase(object):
 
     def addMessage(self, message):
         self.messages.extend(message.split('\n'))
-
