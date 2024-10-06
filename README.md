@@ -25,3 +25,22 @@ python pacman.py -p AlphaBetaAgent -a depth=3 -l smallClassic
 
 The above shows the pacman behavior on reflex agent with two ghost.
 
+# LeftTurnAgent
+
+```
+$ python pacman.py --pacman LeftTurnAgent -n 30 -q
+Average Score: 236.76666666666668
+Scores:        245.0, 220.0, 433.0, 428.0, 214.0, 420.0, 233.0, 233.0, 172.0, -365.0, 189.0, 105.0, 175.0, 376.0, 241.0, 228.0, -28.0, 637.0, 94.0, 395.0, 327.0, 391.0, -329.0, 443.0, 445.0, 10.0, 448.0, -57.0, 393.0, 387.0
+Win Rate:      0/30 (0.00)
+Record:        Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss
+```
+
+# ReflexAgent
+
+```
+$ python pacman.py --pacman ReflexAgent -n 30 -q
+Average Score: 307.8666666666667
+Scores:        1268.0, -3.0, -6.0, 1220.0, -323.0, -31.0, 1082.0, 31.0, 92.0, 1288.0, 89.0, 30.0, -181.0, -61.0, -248.0, 1144.0, 1071.0, -237.0, 727.0, -62.0, -137.0, 1194.0, -64.0, 1156.0, 1058.0, -269.0, -82.0, -48.0, -374.0, -88.0
+Win Rate:      10/30 (0.33)
+Record:        Win, Loss, Loss, Win, Loss, Loss, Win, Loss, Loss, Win, Loss, Loss, Loss, Loss, Loss, Win, Win, Loss, Win, Loss, Loss, Win, Loss, Win, Win, Loss, Loss, Loss, Loss, Loss
+```
