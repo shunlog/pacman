@@ -44,10 +44,13 @@ class ReflexAgent(Agent):
         legalMoves = gameState.getLegalActions()
 
         # Choose one of the best actions
-        scores = [self.evaluationFunction(gameState, action) for action in legalMoves]
+        scores = [self.evaluationFunction(
+            gameState, action) for action in legalMoves]
         bestScore = max(scores)
-        bestIndices = [index for index in range(len(scores)) if scores[index] == bestScore]
-        chosenIndex = random.choice(bestIndices)  # Pick randomly among the best
+        bestIndices = [index for index in range(
+            len(scores)) if scores[index] == bestScore]
+        # Pick randomly among the best
+        chosenIndex = random.choice(bestIndices)
 
         "Add more of your code here if you want to"
 
@@ -73,7 +76,8 @@ class ReflexAgent(Agent):
         newPos = successorGameState.getPacmanPosition()      # Pacman position after moving
         newFood = successorGameState.getFood()               # Remaining food
         newGhostStates = successorGameState.getGhostStates()
-        newScaredTimes = [ghostState.scaredTimer for ghostState in newGhostStates]
+        newScaredTimes = [
+            ghostState.scaredTimer for ghostState in newGhostStates]
 
         "*** YOUR CODE HERE ***"
         listFood = newFood.asList()                        # All remaining food as list
@@ -234,9 +238,11 @@ def betterEvaluationFunction(currentGameState):
     scaredGhostDistList = []
     for each in ghostList:
         if each.scaredTimer == 0:
-            ghostDistList = ghostDistList + [util.manhattanDistance(pacmanPos, each.getPosition())]
+            ghostDistList = ghostDistList + \
+                [util.manhattanDistance(pacmanPos, each.getPosition())]
         elif each.scaredTimer > 0:
-            scaredGhostDistList = scaredGhostDistList + [util.manhattanDistance(pacmanPos, each.getPosition())]
+            scaredGhostDistList = scaredGhostDistList + \
+                [util.manhattanDistance(pacmanPos, each.getPosition())]
     minGhostDist = -1
     if len(ghostDistList) > 0:
         minGhostDist = min(ghostDistList)
