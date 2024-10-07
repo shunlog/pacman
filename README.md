@@ -54,3 +54,13 @@ Scores:        1268.0, -3.0, -6.0, 1220.0, -323.0, -31.0, 1082.0, 31.0, 92.0, 12
 Win Rate:      10/30 (0.33)
 Record:        Win, Loss, Loss, Win, Loss, Loss, Win, Loss, Loss, Win, Loss, Loss, Loss, Loss, Loss, Win, Win, Loss, Win, Loss, Loss, Win, Loss, Win, Win, Loss, Loss, Loss, Loss, Loss
 ```
+
+# Minimax Agent
+
+```
+$ python pacman.py -p MinimaxAgent -l minimaxClassic -a depth=4 -q -n 50
+Average Score: 152.52
+Scores:        516.0, 516.0, 514.0, -492.0, -494.0, 516.0, 514.0, 516.0, 514.0, 516.0, -492.0, 516.0, -492.0, 514.0, 516.0, -492.0, 516.0, 516.0, 516.0, 516.0, -492.0, -494.0, 516.0, 516.0, 516.0, -492.0, -492.0, 514.0, 516.0, -492.0, -492.0, 514.0, 516.0, -495.0, 516.0, -492.0, -492.0, -492.0, 516.0, -492.0, 516.0, 516.0, -495.0, 514.0, 516.0, -494.0, 514.0, 514.0, 516.0, 516.0
+Win Rate:      32/50 (0.64)
+Record:        Win, Win, Win, Loss, Loss, Win, Win, Win, Win, Win, Loss, Win, Loss, Win, Win, Loss, Win, Win, Win, Win, Loss, Loss, Win, Win, Win, Loss, Loss, Win, Win, Loss, Loss, Win, Win, Loss, Win, Loss, Loss, Loss, Win, Loss, Win, Win, Loss, Win, Win, Loss, Win, Win, Win, Win
+```

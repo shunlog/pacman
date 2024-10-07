@@ -149,7 +149,7 @@ class MultiAgentSearchAgent(Agent):
 
 class MinimaxAgent(MultiAgentSearchAgent):
     """
-      Here is the place to define your MiniMax Algorithm
+      Your minimax agent (question 2)
     """
 
     def getAction(self, gameState):
@@ -169,10 +169,52 @@ class MinimaxAgent(MultiAgentSearchAgent):
           gameState.getNumAgents():
             Returns the total number of agents in the game
         """
-        """
-            Your code here
-        """
-        pass
+        "*** YOUR CODE HERE ***"
+
+        " Max Value for computing the best direction of the pacman "
+        def max_value(gameState, depth):
+            " Cases checking "
+            actionList = gameState.getLegalActions(0)  # Get actions of pacman
+            if len(actionList) == 0 or gameState.isWin() or gameState.isLose() or depth == self.depth:
+                return (self.evaluationFunction(gameState), None)
+
+            " Initializing the value of v and action to be returned "
+            v = -(float("inf"))
+            goAction = None
+
+            for thisAction in actionList:
+                successorValue = min_value(
+                    gameState.generateSuccessor(0, thisAction), 1, depth)[0]
+                " Get value of v and action, max(v, successorValue) "
+                if (successorValue > v):
+                    v, goAction = successorValue, thisAction
+            return (v, goAction)
+
+        " Min Value for computing the worst case direction of the ghost "
+        def min_value(gameState, agentID, depth):
+            " Cases checking "
+            actionList = gameState.getLegalActions(
+                agentID)  # Get the actions of the ghost
+            if len(actionList) == 0:
+                return (self.evaluationFunction(gameState), None)
+
+            " Initializing the value of v and action to be returned "
+            v = float("inf")
+            goAction = None
+
+            for thisAction in actionList:
+                if (agentID == gameState.getNumAgents() - 1):
+                    successorValue = max_value(gameState.generateSuccessor(
+                        agentID, thisAction), depth + 1)[0]
+                else:
+                    successorValue = min_value(gameState.generateSuccessor(
+                        agentID, thisAction), agentID + 1, depth)[0]
+                " Get value of v and action, min(v, successorValue) "
+                if (successorValue < v):
+                    v, goAction = successorValue, thisAction
+            return (v, goAction)
+
+        return max_value(gameState, 0)[1]
 
 
 class AlphaBetaAgent(MultiAgentSearchAgent):
