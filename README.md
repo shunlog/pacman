@@ -35,6 +35,16 @@ Win Rate:      0/30 (0.00)
 Record:        Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss
 ```
 
+# GreedyAgent
+
+```
+$ python pacman.py --pacman GreedyAgent -n 30 -q
+Average Score: 216.0
+Scores:        -208.0, 57.0, 1559.0, -70.0, 482.0, 150.0, -329.0, 1300.0, -249.0, -99.0, 1600.0, 407.0, -383.0, 304.0, 591.0, -54.0, -13.0, -105.0, 260.0, 60.0, -239.0, 594.0, 341.0, 177.0, -26.0, 553.0, -275.0, -318.0, -196.0, 609.0
+Win Rate:      3/30 (0.10)
+Record:        Loss, Loss, Win, Loss, Loss, Loss, Loss, Win, Loss, Loss, Win, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss
+```
+
 # ReflexAgent
 
 ```
