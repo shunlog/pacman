@@ -42,7 +42,7 @@ The keys are 'a', 's', 'd', and 'w' to move (or arrow keys).  Have fun!
 from game import GameStateData
 from game import Game
 from game import Directions
-from game import Actions
+from game import Actions, Grid
 from util import nearestPoint
 from util import manhattanDistance
 import util
@@ -167,7 +167,7 @@ class GameState:
             raise Exception("Pacman's index passed to getGhostPosition")
         return self.data.agentStates[agentIndex].getPosition()
 
-    def getGhostPositions(self):
+    def getGhostPositions(self) -> list[tuple[float, float]]:
         return [s.getPosition() for s in self.getGhostStates()]
 
     def getNumAgents(self):
@@ -185,7 +185,7 @@ class GameState:
     def getNumFood(self):
         return self.data.food.count()
 
-    def getFood(self):
+    def getFood(self) -> Grid:
         """
         Returns a Grid of boolean food indicator variables.
 
@@ -197,7 +197,7 @@ class GameState:
         """
         return self.data.food
 
-    def getWalls(self):
+    def getWalls(self) -> Grid:
         """
         Returns a Grid of boolean wall indicator variables.
 
