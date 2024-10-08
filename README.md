@@ -70,3 +70,13 @@ Picking an evaluation function:
 ```
 $ python pacman.py -p MinimaxAgent -a evalFn=dumbEvalFunc
 ```
+
+# Minimax with improved scoring (`Dumb2EvalFunc`)
+
+```
+$ python pacman.py -p MinimaxAgent -a evalFn=dumb2,depth=2 -q -n 30
+Average Score: 1617.3333333333333
+Scores:        222.0, 1540.0, 1730.0, 1738.0, 1934.0, 1737.0, 1735.0, 1335.0, 1545.0, 1742.0, 1540.0, 1721.0, 1937.0, 1337.0, 1716.0, 1536.0, 1724.0, 1531.0, 1741.0, 1542.0, 1539.0, 1339.0, 1739.0, 1521.0, 1924.0, 1537.0, 1931.0, 1537.0, 1945.0, 1925.0
+Win Rate:      29/30 (0.97)
+Record:        Loss, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win
+```

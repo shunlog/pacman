@@ -22,6 +22,7 @@ from icecream import ic
 
 from pacman import GameState
 from game import Agent, Actions
+from search import BFS
 
 
 class ReflexAgent(Agent):
@@ -329,20 +330,53 @@ better = betterEvaluationFunction
 
 
 def dumbEvalFunc(state: GameState):
-    from search import BFS
-    from icecream import ic
-
+    '''
+    As stated in the lab, task 1:
+    score = - pellet_score + ghost_danger, where
+    - pellet_score: min dist. to food
+    - ghost_danger: min dist. to ghost
+    '''
     closest_pellet_dist = BFS(state)[1]
     closest_ghost_dist = BFS(state, True)[1]
 
     # the farther away, the worse;
-    # don't allow a 0 dist to affect it
-    pellet_score = 1 * (10 - closest_pellet_dist)
+    pellet_score = - closest_pellet_dist
     # the farther, the better
-    ghost_score = 1 * (closest_ghost_dist)
+    ghost_score = closest_ghost_dist
 
-    value = pellet_score + ghost_score
-    return value
+    score = pellet_score + ghost_score
+    return score
 
 
 dumb = dumbEvalFunc
+
+
+def dumb2EvalFunc(state: GameState):
+    """
+    Integrate the game's score with the distance to closest food.
+    """
+    closest_pellet_dist = BFS(state)[1]
+    closest_ghost_dist = BFS(state, True)[1]
+
+    # force pacman to eat the pellet once he gets to it,
+    # otherwise he won't eat the pellet because
+    # closest_pellet_dist would jump from 1 to ~15
+    # which would discourage him greatly
+    if closest_pellet_dist == 1:
+        closest_pellet_dist = 0
+
+    game_score = state.getScore()
+    # the farther away, the worse;
+    pellet_score = - closest_pellet_dist
+    # the farther, the better
+    ghost_score = closest_ghost_dist
+    food_count = state.getFood().count()
+    # the less food remains, the better
+    # add 1 so if food_count becomes 0, it still contributes to the score
+    food_score = - food_count + 1
+
+    score = game_score + 2 * pellet_score + ghost_score + 30 * food_score
+    return score
+
+
+dumb2 = dumb2EvalFunc
