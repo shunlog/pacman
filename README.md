@@ -57,12 +57,13 @@ Record:        Win, Loss, Loss, Win, Loss, Loss, Win, Loss, Loss, Win, Loss, Los
 
 # Minimax Agent
 
+Takes about 2 minutes:
 ```
 $ python pacman.py -p MinimaxAgent -l minimaxClassic -a depth=4 -q -n 50
-Average Score: 152.52
-Scores:        516.0, 516.0, 514.0, -492.0, -494.0, 516.0, 514.0, 516.0, 514.0, 516.0, -492.0, 516.0, -492.0, 514.0, 516.0, -492.0, 516.0, 516.0, 516.0, 516.0, -492.0, -494.0, 516.0, 516.0, 516.0, -492.0, -492.0, 514.0, 516.0, -492.0, -492.0, 514.0, 516.0, -495.0, 516.0, -492.0, -492.0, -492.0, 516.0, -492.0, 516.0, 516.0, -495.0, 514.0, 516.0, -494.0, 514.0, 514.0, 516.0, 516.0
-Win Rate:      32/50 (0.64)
-Record:        Win, Win, Win, Loss, Loss, Win, Win, Win, Win, Win, Loss, Win, Loss, Win, Win, Loss, Win, Win, Win, Win, Loss, Loss, Win, Win, Win, Loss, Loss, Win, Win, Loss, Loss, Win, Win, Loss, Win, Loss, Loss, Loss, Win, Loss, Win, Win, Loss, Win, Win, Loss, Win, Win, Win, Win
+Average Score: 293.78
+Scores:        -495.0, 516.0, 516.0, 516.0, 516.0, 516.0, 516.0, 516.0, 516.0, 516.0, 516.0, 516.0, -494.0, 516.0, 516.0, -492.0, 516.0, 516.0, 516.0, 516.0, 516.0, -492.0, 514.0, -494.0, 516.0, 516.0, 516.0, 516.0, 516.0, 516.0, -492.0, -494.0, 514.0, 516.0, 516.0, 516.0, -492.0, 516.0, 514.0, 516.0, 516.0, 516.0, 516.0, 516.0, 514.0, 516.0, -495.0, 516.0, -492.0, -495.0
+Win Rate:      39/50 (0.78)
+Record:        Loss, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Loss, Win, Win, Loss, Win, Win, Win, Win, Win, Loss, Win, Loss, Win, Win, Win, Win, Win, Win, Loss, Loss, Win, Win, Win, Win, Loss, Win, Win, Win, Win, Win, Win, Win, Win, Win, Loss, Win, Loss, Loss
 ```
 
 Picking an evaluation function:

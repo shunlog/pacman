@@ -11,16 +11,17 @@
 # Student side autograding was added by Brad Miller, Nick Hay, and
 # Pieter Abbeel (pabbeel@cs.berkeley.edu).
 
-
+from typing import Any
 from util import manhattanDistance
 from game import Directions
 import random
 import util
 import sys
+import math
 from icecream import ic
 
 from pacman import GameState
-from game import Agent
+from game import Agent, Actions
 
 
 class ReflexAgent(Agent):
@@ -149,6 +150,41 @@ class MultiAgentSearchAgent(Agent):
         self.depth = int(depth)
 
 
+def minimax(node, depth: int, player,
+            is_terminal, state_value, get_next_player,
+            is_maximizing_player, children) \
+        -> tuple[Any, int]:
+    '''A general Minimax algorithm for a game of 2 teams.
+    Players can take turns in any order, specified by the `get_nextplayer` function.
+    Returns a tuple `(action, value)`, where action can be anything.
+    `depth` denotes the total depth of the tree.
+
+    For pacman:
+    - The first team consists only of Pacman, which is the maximizing player,
+    and the second is the team of ghosts.
+    - The nodes are GameState instances,
+    - actions are Action instances (4 moves + stopping),
+    - players are represented by agentIds, which in turn are integers.
+
+    '''
+    if depth == 0 or is_terminal(node):
+        return (None, state_value(node))
+
+    # by convention, we root for the white player
+    white = is_maximizing_player(player)
+    value = -999999 if white else 999999
+    best_action = None
+    for action, child in children(node, player):
+        next_player = get_next_player(player)
+        act, new_val = minimax(child, depth - 1, next_player,
+                               is_terminal, state_value, get_next_player,
+                               is_maximizing_player, children)
+        if (white and new_val > value) or (not white and new_val < value):
+            value = new_val
+            best_action = action
+    return (best_action, value)
+
+
 class MinimaxAgent(MultiAgentSearchAgent):
     """
       Your minimax agent (question 2)
@@ -171,57 +207,33 @@ class MinimaxAgent(MultiAgentSearchAgent):
           gameState.getNumAgents():
             Returns the total number of agents in the game
         """
-        "*** YOUR CODE HERE ***"
+        "*** MY CODE HERE ***"
 
-        " Max Value for computing the best direction of the pacman "
-        def max_value(gameState, depth):
-            " Cases checking "
-            actionList = gameState.getLegalActions(0)  # Get actions of pacman
-            if len(actionList) == 0 or gameState.isWin() or gameState.isLose() or depth == self.depth:
-                return (self.evaluationFunction(gameState), None)
+        def is_pacman(p): return p == 0
 
-            " Initializing the value of v and action to be returned "
-            v = -(float("inf"))
-            goAction = None
-            alternatives = []
+        def next_states(state: GameState, agent_id: int) -> list[tuple[Actions, GameState]]:
+            actions = state.getLegalActions(agent_id)
+            next_states = [state.generateSuccessor(
+                agent_id, a) for a in actions]
+            return list(zip(actions, next_states))
 
-            for thisAction in actionList:
-                successorValue = min_value(
-                    gameState.generateSuccessor(0, thisAction), 1, depth)[0]
-                " Get value of v and action, max(v, successorValue) "
-                if (successorValue > v):
-                    v, goAction = successorValue, thisAction
-                    alternatives = [thisAction]
-                elif successorValue == v:
-                    alternatives.append(thisAction)
-            oneOfBest = random.choice(alternatives)
-            return (v, oneOfBest)
+        def next_agent(agent_id: int) -> int:
+            agents = gameState.getNumAgents()
+            return (agent_id + 1) % agents
 
-        " Min Value for computing the worst case direction of the ghost "
-        def min_value(gameState, agentID, depth):
-            " Cases checking "
-            actionList = gameState.getLegalActions(
-                agentID)  # Get the actions of the ghost
-            if len(actionList) == 0:
-                return (self.evaluationFunction(gameState), None)
+        def is_terminal(state: GameState) -> bool:
+            # pacman available actions:
+            actionList = state.getLegalActions(0)
+            return len(actionList) == 0 or state.isWin() or state.isLose()
 
-            " Initializing the value of v and action to be returned "
-            v = float("inf")
-            goAction = None
-
-            for thisAction in actionList:
-                if (agentID == gameState.getNumAgents() - 1):
-                    successorValue = max_value(gameState.generateSuccessor(
-                        agentID, thisAction), depth + 1)[0]
-                else:
-                    successorValue = min_value(gameState.generateSuccessor(
-                        agentID, thisAction), agentID + 1, depth)[0]
-                " Get value of v and action, min(v, successorValue) "
-                if (successorValue < v):
-                    v, goAction = successorValue, thisAction
-            return (v, goAction)
-
-        return max_value(gameState, 0)[1]
+        agents_count = gameState.getNumAgents()
+        # we consider 1 depth when every agent made their turn
+        depth = self.depth * agents_count
+        first_agent = 0  # pacman moves first
+        action, value = minimax(gameState, depth, first_agent,
+                                is_terminal, self.evaluationFunction,
+                                next_agent, is_pacman, next_states)
+        return action
 
 
 class AlphaBetaAgent(MultiAgentSearchAgent):
