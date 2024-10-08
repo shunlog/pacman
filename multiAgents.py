@@ -17,7 +17,9 @@ from game import Directions
 import random
 import util
 import sys
+from icecream import ic
 
+from pacman import GameState
 from game import Agent
 
 
@@ -181,6 +183,7 @@ class MinimaxAgent(MultiAgentSearchAgent):
             " Initializing the value of v and action to be returned "
             v = -(float("inf"))
             goAction = None
+            alternatives = []
 
             for thisAction in actionList:
                 successorValue = min_value(
@@ -188,7 +191,11 @@ class MinimaxAgent(MultiAgentSearchAgent):
                 " Get value of v and action, max(v, successorValue) "
                 if (successorValue > v):
                     v, goAction = successorValue, thisAction
-            return (v, goAction)
+                    alternatives = [thisAction]
+                elif successorValue == v:
+                    alternatives.append(thisAction)
+            oneOfBest = random.choice(alternatives)
+            return (v, oneOfBest)
 
         " Min Value for computing the worst case direction of the ghost "
         def min_value(gameState, agentID, depth):
