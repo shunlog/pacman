@@ -154,7 +154,7 @@ class MinimaxAgent(MultiAgentSearchAgent):
       Your minimax agent (question 2)
     """
 
-    def getAction(self, gameState):
+    def getAction(self, gameState: GameState):
         """
           Returns the minimax action from the current gameState using self.depth
           and self.evaluationFunction.
@@ -308,3 +308,23 @@ def betterEvaluationFunction(currentGameState):
 
 # Abbreviation
 better = betterEvaluationFunction
+
+
+def dumbEvalFunc(state: GameState):
+    from search import BFS
+    from icecream import ic
+
+    closest_pellet_dist = BFS(state)[1]
+    closest_ghost_dist = BFS(state, True)[1]
+
+    # the farther away, the worse;
+    # don't allow a 0 dist to affect it
+    pellet_score = 1 * (10 - closest_pellet_dist)
+    # the farther, the better
+    ghost_score = 1 * (closest_ghost_dist)
+
+    value = pellet_score + ghost_score
+    return value
+
+
+dumb = dumbEvalFunc

@@ -64,3 +64,8 @@ Scores:        516.0, 516.0, 514.0, -492.0, -494.0, 516.0, 514.0, 516.0, 514.0, 
 Win Rate:      32/50 (0.64)
 Record:        Win, Win, Win, Loss, Loss, Win, Win, Win, Win, Win, Loss, Win, Loss, Win, Win, Loss, Win, Win, Win, Win, Loss, Loss, Win, Win, Win, Loss, Loss, Win, Win, Loss, Loss, Win, Win, Loss, Win, Loss, Loss, Loss, Win, Loss, Win, Win, Loss, Win, Win, Loss, Win, Win, Win, Win
 ```
+
+Picking an evaluation function:
+```
+$ python pacman.py -p MinimaxAgent -a evalFn=dumbEvalFunc
+```
