@@ -173,7 +173,7 @@ def minimax(node, depth: int, player,
     # by convention, we root for the white player
     white = is_maximizing_player(player)
     value = -999999 if white else 999999
-    best_action = None
+    best_actions = []
     for action, child in children(node, player):
         next_player = get_next_player(player)
         act, new_val = minimax(child, depth - 1, next_player,
@@ -181,8 +181,14 @@ def minimax(node, depth: int, player,
                                is_maximizing_player, children)
         if (white and new_val > value) or (not white and new_val < value):
             value = new_val
-            best_action = action
-    return (best_action, value)
+            best_actions = [action]
+        elif new_val == value:
+            best_actions.append(action)
+
+    # pick a random action from the equally best ones
+    # so that the player doesn't run in circles
+    action = random.choice(best_actions)
+    return (action, value)
 
 
 class MinimaxAgent(MultiAgentSearchAgent):
