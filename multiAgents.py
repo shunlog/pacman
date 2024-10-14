@@ -22,7 +22,7 @@ from icecream import ic
 
 from pacman import GameState
 from game import Agent, Actions
-from search import BFS
+from search import BFS_ghosts, BFS_pellets, BFS_capsules
 
 
 class ReflexAgent(Agent):
@@ -336,8 +336,8 @@ def dumbEvalFunc(state: GameState):
     - pellet_score: min dist. to food
     - ghost_danger: min dist. to ghost
     '''
-    closest_pellet_dist = BFS(state)[1]
-    closest_ghost_dist = BFS(state, True)[1]
+    closest_pellet_dist = BFS_pellets(state)[1]
+    closest_ghost_dist = BFS_ghosts(state)[1]
 
     # the farther away, the worse;
     pellet_score = - closest_pellet_dist
@@ -355,27 +355,38 @@ def dumb2EvalFunc(state: GameState):
     """
     Integrate the game's score with the distance to closest food.
     """
-    closest_pellet_dist = BFS(state)[1]
-    closest_ghost_dist = BFS(state, True)[1]
+    # Maximum distance possible between any two points in the maze.
+    # I don't think it matters if it's excessively big on the results,
+    # but it will make the coefficients wildly different
+    MAX_DIST = 100
 
     # force pacman to eat the pellet once he gets to it,
     # otherwise he won't eat the pellet because
     # closest_pellet_dist would jump from 1 to ~15
-    # which would discourage him greatly
-    if closest_pellet_dist == 1:
-        closest_pellet_dist = 0
+    # which would discourage him greatly.
+    closest_pellet_dist = BFS_pellets(state)[1]
+    pellet_count = state.getFood().count()
+    # The less food remains, the better, therefore negative coeff.
+    # The less distance the better, therefore negative coeff.
+    # We multiply the pellet count by the max. possible dist,
+    # such that eating a pellet is always better than having a pellet close by
+    pellet_score = - closest_pellet_dist + MAX_DIST * (- pellet_count + 1)
 
-    game_score = state.getScore()
-    # the farther away, the worse;
-    pellet_score = - closest_pellet_dist
+    closest_ghost_dist = BFS_ghosts(state)[1]
     # the farther, the better
     ghost_score = closest_ghost_dist
-    food_count = state.getFood().count()
-    # the less food remains, the better
-    # add 1 so if food_count becomes 0, it still contributes to the score
-    food_score = - food_count + 1
 
-    score = game_score + 2 * pellet_score + ghost_score + 30 * food_score
+    # # if ghost is close enough,
+    # # prefer capsules over pellets
+    # capsule_dist = BFS_capsules(state)[1]
+    # capsule_count = len(state.getCapsules())
+    # capsule_score = - capsule_dist
+    # capsules_score = - capsule_count + 1
+
+    # eat ghosts!
+    game_score = state.getScore()
+
+    score = 10 * game_score + 2 * pellet_score + ghost_score
     return score
 
 

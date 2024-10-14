@@ -80,3 +80,18 @@ Scores:        222.0, 1540.0, 1730.0, 1738.0, 1934.0, 1737.0, 1735.0, 1335.0, 15
 Win Rate:      29/30 (0.97)
 Record:        Loss, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win
 ```
+
+# BFS vs A* performance
+
+It's noticeably slower on the trickyClassic layout,
+probably because of BFS.
+A single run takes almost 40s.
+```
+$ time python pacman.py -p MinimaxAgent -l trickyClassic -a evalFn=dumb2,depth=2 -q 
+Pacman emerges victorious! Score: 1472
+Average Score: 1472.0
+Scores:        1472.0
+Win Rate:      1/1 (1.00)
+Record:        Win
+python pacman.py -p MinimaxAgent -l trickyClassic -a evalFn=dumb2,depth=2 -q  38.11s user 0.19s system 99% cpu 38.403 total
+```
