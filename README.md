@@ -96,15 +96,66 @@ python pacman.py -p AlphaBetaAgent -l originalClassic -a evalFn=dumb2,depth=2  8
 
 # BFS vs A* performance
 
-It's noticeably slower on the trickyClassic layout,
-probably because of BFS.
-A single run takes almost 40s.
+Using 5 runs on the original layout with 4 ghosts.
+
+With BFS it took 2 minutes.
 ```
-$ time python pacman.py -p MinimaxAgent -l trickyClassic -a evalFn=dumb2,depth=2 -q 
-Pacman emerges victorious! Score: 1472
-Average Score: 1472.0
-Scores:        1472.0
-Win Rate:      1/1 (1.00)
-Record:        Win
-python pacman.py -p MinimaxAgent -l trickyClassic -a evalFn=dumb2,depth=2 -q  38.11s user 0.19s system 99% cpu 38.403 total
+time python pacman.py -p MinimaxAgent -l originalClassic -a evalFn=dumb2,depth=2 -q -n 5
+Pacman emerges victorious! Score: 2660
+Pacman emerges victorious! Score: 3063
+Pacman emerges victorious! Score: 2661
+Pacman emerges victorious! Score: 2839
+Pacman emerges victorious! Score: 2673
+Average Score: 2779.2
+Scores:        2660.0, 3063.0, 2661.0, 2839.0, 2673.0
+Win Rate:      5/5 (1.00)
+Record:        Win, Win, Win, Win, Win
+python pacman.py -p MinimaxAgent -l originalClassic -a evalFn=dumb2,depth=2 -  118.30s user 0.54s system 99% cpu 1:59.34 total
+```
+
+With A* it's 2:16, a bit slower.
+```
+$ time python pacman.py -p MinimaxAgent -l originalClassic -a evalFn=dumbAstar,depth=2 -q -n 5
+Pacman emerges victorious! Score: 2875
+Pacman emerges victorious! Score: 2870
+Pacman emerges victorious! Score: 2879
+Pacman died! Score: 164
+Pacman died! Score: 1159
+Average Score: 1989.4
+Scores:        2875.0, 2870.0, 2879.0, 164.0, 1159.0
+Win Rate:      3/5 (0.60)
+Record:        Win, Win, Win, Loss, Loss
+python pacman.py -p MinimaxAgent -l originalClassic -a  -q -n 5  135.62s user 0.37s system 99% cpu 2:16.32 total
+```
+
+Now let's try with only 1 ghost.
+
+BFS: 24 seconds.
+```
+$ time python pacman.py -p MinimaxAgent -l originalClassic -a evalFn=dumb2,depth=2 -q -n 5 -k 1    
+Pacman emerges victorious! Score: 2882
+Pacman emerges victorious! Score: 2692
+Pacman emerges victorious! Score: 2680
+Pacman emerges victorious! Score: 2452
+Pacman emerges victorious! Score: 2484
+Average Score: 2638.0
+Scores:        2882.0, 2692.0, 2680.0, 2452.0, 2484.0
+Win Rate:      5/5 (1.00)
+Record:        Win, Win, Win, Win, Win
+python pacman.py -p MinimaxAgent -l originalClassic -a evalFn=dumb2,depth=2 -  23.89s user 0.16s system 99% cpu 24.118 total
+```
+
+A*: 24 seconds.
+```
+$ time python pacman.py -p MinimaxAgent -l originalClassic -a evalFn=dumbAstar,depth=2 -q -n 5 -k 1
+Pacman emerges victorious! Score: 2435
+Pacman emerges victorious! Score: 2489
+Pacman emerges victorious! Score: 2457
+Pacman emerges victorious! Score: 2478
+Pacman emerges victorious! Score: 2480
+Average Score: 2467.8
+Scores:        2435.0, 2489.0, 2457.0, 2478.0, 2480.0
+Win Rate:      5/5 (1.00)
+Record:        Win, Win, Win, Win, Win
+python pacman.py -p MinimaxAgent -l originalClassic -a  -q -n 5 -k 1  23.71s user 0.16s system 99% cpu 23.931 total
 ```

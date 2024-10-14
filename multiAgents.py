@@ -22,7 +22,7 @@ from icecream import ic
 
 from pacman import GameState
 from game import Agent, Actions
-from search import BFS_ghosts, BFS_pellets, BFS_capsules
+from search import BFS_ghosts, BFS_pellets, BFS_capsules, Astar_ghosts
 
 
 class ReflexAgent(Agent):
@@ -262,7 +262,6 @@ class MinimaxAgent(MultiAgentSearchAgent):
           gameState.getNumAgents():
             Returns the total number of agents in the game
         """
-        "*** MY CODE HERE ***"
 
         # the pacman CLI considers 1 depth level when every agent made 1 turn,
         # whereas the minimax algo. considers it as a single turn by one agent
@@ -288,30 +287,6 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
         action, value = pacman_minimax(
             gameState, depth, self.evaluationFunction, pruning=True)
         return action
-
-
-class AStarMinimaxAgent(MultiAgentSearchAgent):
-    """
-      Your Minimax algorithm with A* path searching improvement agent
-    """
-
-    def getAction(self, gameState):
-        """
-          Your code here
-        """
-        pass
-
-
-class AStarAlphaBetaAgent(MultiAgentSearchAgent):
-    """
-      Your Alpha-Beta pruning algorithm with A* path searching improvement agent
-    """
-
-    def getAction(self, gameState):
-        """
-          Your code here
-        """
-        pass
 
 
 def betterEvaluationFunction(currentGameState):
@@ -386,7 +361,7 @@ def dumbEvalFunc(state: GameState):
 dumb = dumbEvalFunc
 
 
-def dumb2EvalFunc(state: GameState):
+def dumb2EvalFunc(state: GameState, Astar=False):
     """
     Integrate the game's score with the distance to closest food.
     """
@@ -407,7 +382,10 @@ def dumb2EvalFunc(state: GameState):
     # such that eating a pellet is always better than having a pellet close by
     pellet_score = - closest_pellet_dist + MAX_DIST * (- pellet_count + 1)
 
-    closest_ghost_dist = BFS_ghosts(state)[1]
+    if not Astar:
+        closest_ghost_dist = BFS_ghosts(state)[1]
+    else:
+        closest_ghost_dist = Astar_ghosts(state)[1]
     # the farther, the better
     ghost_score = closest_ghost_dist
 
@@ -426,3 +404,4 @@ def dumb2EvalFunc(state: GameState):
 
 
 dumb2 = dumb2EvalFunc
+def dumbAstar(s): return dumb2EvalFunc(s, True)
