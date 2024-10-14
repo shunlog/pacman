@@ -153,8 +153,8 @@ class MultiAgentSearchAgent(Agent):
 
 def minimax(node, depth: int, player,
             is_terminal, state_value, get_next_player,
-            is_maximizing_player, children,
-            alpha=None, beta=None) \
+            is_maximizing_player, get_children,
+            alpha=None, beta=None, heuristic=None) \
         -> tuple[Any, int]:
     '''A general Minimax algorithm for a game of 2 teams.
     Players can take turns in any order, specified by the `get_nextplayer` function.
@@ -162,6 +162,8 @@ def minimax(node, depth: int, player,
     `depth` denotes the total depth of the tree.
 
     If alpha and beta are not None, perform alpha-beta pruning.
+    When doing alpha-beta pruning, a heuristic can be provided
+    to order the children nodes such that the best branches are examined first.
 
     For pacman:
     - The first team consists only of Pacman, which is the maximizing player,
@@ -179,11 +181,21 @@ def minimax(node, depth: int, player,
     whites = is_maximizing_player(player)
     value = -999999 if whites else 999999
     best_actions = []
-    for action, child in children(node, player):
+
+    # use the heuristic to order the children
+    # to improve alpha-beta pruning by examining best branches first
+    unordered_children = get_children(node, player)
+    if heuristic:
+        children = sorted(
+            unordered_children, key=lambda c: heuristic(c[1]), reverse=True)
+    else:
+        children = unordered_children
+
+    for action, child in children:
         next_player = get_next_player(player)
         act, new_val = minimax(child, depth - 1, next_player,
                                is_terminal, state_value, get_next_player,
-                               is_maximizing_player, children,
+                               is_maximizing_player, get_children,
                                alpha=alpha, beta=beta)
         if (whites and new_val > value) or (not whites and new_val < value):
             value = new_val
@@ -232,6 +244,7 @@ def pacman_minimax(gameState: GameState, depth: int, eval_func, pruning=False) -
                          is_terminal, eval_func,
                          next_agent, is_pacman, next_states)
     else:
+        def heuristic(state): return state.getScore()
         result = minimax(gameState, depth, first_agent,
                          is_terminal, eval_func,
                          next_agent, is_pacman, next_states,
