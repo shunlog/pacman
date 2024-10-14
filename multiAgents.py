@@ -153,12 +153,15 @@ class MultiAgentSearchAgent(Agent):
 
 def minimax(node, depth: int, player,
             is_terminal, state_value, get_next_player,
-            is_maximizing_player, children) \
+            is_maximizing_player, children,
+            alpha=None, beta=None) \
         -> tuple[Any, int]:
     '''A general Minimax algorithm for a game of 2 teams.
     Players can take turns in any order, specified by the `get_nextplayer` function.
     Returns a tuple `(action, value)`, where action can be anything.
     `depth` denotes the total depth of the tree.
+
+    If alpha and beta are not None, perform alpha-beta pruning.
 
     For pacman:
     - The first team consists only of Pacman, which is the maximizing player,
@@ -171,18 +174,29 @@ def minimax(node, depth: int, player,
     if depth == 0 or is_terminal(node):
         return (None, state_value(node))
 
-    # by convention, we root for the white player
-    white = is_maximizing_player(player)
-    value = -999999 if white else 999999
+    # if `white` is True, this is a turn of the maxizing team.
+    # By convention, we root for the whites.
+    whites = is_maximizing_player(player)
+    value = -999999 if whites else 999999
     best_actions = []
     for action, child in children(node, player):
         next_player = get_next_player(player)
         act, new_val = minimax(child, depth - 1, next_player,
                                is_terminal, state_value, get_next_player,
-                               is_maximizing_player, children)
-        if (white and new_val > value) or (not white and new_val < value):
+                               is_maximizing_player, children,
+                               alpha=alpha, beta=beta)
+        if (whites and new_val > value) or (not whites and new_val < value):
             value = new_val
             best_actions = [action]
+            if alpha and beta:  # do pruning if alpha and beta are not None
+                if whites:
+                    alpha = max(alpha, value)
+                    if value >= beta:
+                        break
+                else:
+                    beta = min(beta, value)
+                    if value <= alpha:
+                        break
         elif new_val == value:
             best_actions.append(action)
 
@@ -190,6 +204,40 @@ def minimax(node, depth: int, player,
     # so that the player doesn't run in circles
     action = random.choice(best_actions)
     return (action, value)
+
+
+def pacman_minimax(gameState: GameState, depth: int, eval_func, pruning=False) -> tuple[Any, int]:
+    '''A wrapper around the general minimax for the pacman state.'''
+    def is_pacman(p): return p == 0
+
+    def next_states(state: GameState, agent_id: int) -> list[tuple[Actions, GameState]]:
+        actions = state.getLegalActions(agent_id)
+        next_states = [state.generateSuccessor(
+            agent_id, a) for a in actions]
+        return list(zip(actions, next_states))
+
+    def next_agent(agent_id: int) -> int:
+        agents = gameState.getNumAgents()
+        return (agent_id + 1) % agents
+
+    def is_terminal(state: GameState) -> bool:
+        # pacman available actions:
+        actionList = state.getLegalActions(0)
+        return len(actionList) == 0 or state.isWin() or state.isLose()
+
+    first_agent = 0  # pacman moves first
+
+    if not pruning:
+        result = minimax(gameState, depth, first_agent,
+                         is_terminal, eval_func,
+                         next_agent, is_pacman, next_states)
+    else:
+        result = minimax(gameState, depth, first_agent,
+                         is_terminal, eval_func,
+                         next_agent, is_pacman, next_states,
+                         alpha=-999999, beta=999999)
+
+    return result
 
 
 class MinimaxAgent(MultiAgentSearchAgent):
@@ -216,30 +264,13 @@ class MinimaxAgent(MultiAgentSearchAgent):
         """
         "*** MY CODE HERE ***"
 
-        def is_pacman(p): return p == 0
-
-        def next_states(state: GameState, agent_id: int) -> list[tuple[Actions, GameState]]:
-            actions = state.getLegalActions(agent_id)
-            next_states = [state.generateSuccessor(
-                agent_id, a) for a in actions]
-            return list(zip(actions, next_states))
-
-        def next_agent(agent_id: int) -> int:
-            agents = gameState.getNumAgents()
-            return (agent_id + 1) % agents
-
-        def is_terminal(state: GameState) -> bool:
-            # pacman available actions:
-            actionList = state.getLegalActions(0)
-            return len(actionList) == 0 or state.isWin() or state.isLose()
-
+        # the pacman CLI considers 1 depth level when every agent made 1 turn,
+        # whereas the minimax algo. considers it as a single turn by one agent
         agents_count = gameState.getNumAgents()
-        # we consider 1 depth when every agent made their turn
         depth = self.depth * agents_count
-        first_agent = 0  # pacman moves first
-        action, value = minimax(gameState, depth, first_agent,
-                                is_terminal, self.evaluationFunction,
-                                next_agent, is_pacman, next_states)
+
+        action, value = pacman_minimax(
+            gameState, depth, self.evaluationFunction)
         return action
 
 
@@ -249,10 +280,14 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
     """
 
     def getAction(self, gameState):
-        """
-          Your code here
-        """
-        pass
+        # the pacman CLI considers 1 depth level when every agent made 1 turn,
+        # whereas the minimax algo. considers it as a single turn by one agent
+        agents_count = gameState.getNumAgents()
+        depth = self.depth * agents_count
+
+        action, value = pacman_minimax(
+            gameState, depth, self.evaluationFunction, pruning=True)
+        return action
 
 
 class AStarMinimaxAgent(MultiAgentSearchAgent):

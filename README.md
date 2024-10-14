@@ -81,6 +81,19 @@ Win Rate:      29/30 (0.97)
 Record:        Loss, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win, Win
 ```
 
+# Minimax with alpha-beta pruning
+
+We want to compare the performance with and without pruning.
+```
+$ time python pacman.py -p AlphaBetaAgent -l originalClassic -a evalFn=dumb2,depth=2 -q
+Pacman died! Score: 1317
+Average Score: 1317.0
+Scores:        1317.0
+Win Rate:      0/1 (0.00)
+Record:        Loss
+python pacman.py -p AlphaBetaAgent -l originalClassic -a evalFn=dumb2,depth=2  8.63s user 0.07s system 99% cpu 8.718 total
+```
+
 # BFS vs A* performance
 
 It's noticeably slower on the trickyClassic layout,
