@@ -1,9 +1,14 @@
-# MultiAgentPacman
-Pacman AI 😎
+# Parameters
 
-**Multi Agent Pacman** is another version of pacman agent that will find its path with the minimax, alpha beta pruning, and expectimax to collect its foods, and the ghost while blinking.
+Agents (`-p` flag):
+- MinimaxAgent
+- AlphaBetaAgent
 
-You can use the commands below to run the project 
+Evaluation function (`-a evalFn=...`):
+- `dumb`: lab requirement (pellet dist + ghost dist)
+- `dumb2`: `dumb` + game score
+- `dumbAstar`: `dumb2` using A* search
+
 
 # List of commands Pacman AI
 ```
