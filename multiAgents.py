@@ -218,7 +218,8 @@ def minimax(node, depth: int, player,
     return (action, value)
 
 
-def pacman_minimax(gameState: GameState, depth: int, eval_func, pruning=False) -> tuple[Any, int]:
+def pacman_minimax(gameState: GameState, depth: int, eval_func, pruning=False,
+                   heuristic=None) -> tuple[Any, int]:
     '''A wrapper around the general minimax for the pacman state.'''
     def is_pacman(p): return p == 0
 
@@ -244,11 +245,10 @@ def pacman_minimax(gameState: GameState, depth: int, eval_func, pruning=False) -
                          is_terminal, eval_func,
                          next_agent, is_pacman, next_states)
     else:
-        def heuristic(state): return state.getScore()
         result = minimax(gameState, depth, first_agent,
                          is_terminal, eval_func,
                          next_agent, is_pacman, next_states,
-                         alpha=-999999, beta=999999)
+                         alpha=-999999, beta=999999, heuristic=heuristic)
 
     return result
 
@@ -287,10 +287,6 @@ class MinimaxAgent(MultiAgentSearchAgent):
 
 
 class AlphaBetaAgent(MultiAgentSearchAgent):
-    """
-      Here is the place to define your Alpha-Beta Pruning Algorithm
-    """
-
     def getAction(self, gameState):
         # the pacman CLI considers 1 depth level when every agent made 1 turn,
         # whereas the minimax algo. considers it as a single turn by one agent
@@ -299,6 +295,22 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
 
         action, value = pacman_minimax(
             gameState, depth, self.evaluationFunction, pruning=True)
+        return action
+
+
+class AlphaBetaHAgent(MultiAgentSearchAgent):
+    '''Alpha-beta with a heuristic function for move ordering,
+    which should increase the numbre of pruned nodes.'''
+
+    def getAction(self, gameState):
+        # the pacman CLI considers 1 depth level when every agent made 1 turn,
+        # whereas the minimax algo. considers it as a single turn by one agent
+        agents_count = gameState.getNumAgents()
+        depth = self.depth * agents_count
+
+        def heuristic(state): return state.getScore()
+        action, value = pacman_minimax(gameState, depth, self.evaluationFunction,
+                                       pruning=True, heuristic=heuristic)
         return action
 
 
