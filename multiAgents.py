@@ -402,13 +402,6 @@ def dumb2EvalFunc(state: GameState, Astar=False):
     # the farther, the better
     ghost_score = closest_ghost_dist
 
-    # # if ghost is close enough,
-    # # prefer capsules over pellets
-    # capsule_dist = BFS_capsules(state)[1]
-    # capsule_count = len(state.getCapsules())
-    # capsule_score = - capsule_dist
-    # capsules_score = - capsule_count + 1
-
     # eat ghosts!
     game_score = state.getScore()
 
